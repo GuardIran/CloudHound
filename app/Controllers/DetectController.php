@@ -81,11 +81,11 @@ class DetectController extends Controller
         $this->private_db_status = $this->database_controller->DatabaseStatus();
 
 
-        echo "\e[1;31;40m[!] CloudFlare IP : \e[1;36;40m" . $cloudflare_ip . PHP_EOL . PHP_EOL . "\e[1;37;40m    ";
+        echo "\e[1;31;40m[!] CloudFlare IP : \e[1;36;40m" . $cloudflare_ip . "\e[1;37;40m" . PHP_EOL . PHP_EOL . "    ";
 
         sleep(1);
 
-        echo "\e[1;31;40m[*] Trying to Detect Original IP : " . PHP_EOL . PHP_EOL . "\e[1;37;40m    ";
+        echo "\e[1;31;40m[*] Trying to Detect Original IP : " . "\e[1;37;40m" . PHP_EOL . PHP_EOL . "    ";
 
         sleep(1);
 
@@ -173,7 +173,7 @@ class DetectController extends Controller
 
     public function method1($hostname)
     {
-        echo "\e[1;31;40m[*] Method 1 : \e[1;36;40mChecking Guardiran DNS History Database (" . number_format($this->private_db_status['ip_db']) . " Records)" . PHP_EOL . PHP_EOL . "\e[1;37;40m    ";
+        echo "\e[1;31;40m[*] Method 1 : \e[1;36;40mChecking Guardiran DNS History Database (" . number_format($this->private_db_status['ip_db']) . " Records) \e[1;37;40m" . PHP_EOL . PHP_EOL . "    ";
 
         sleep(1);
 
@@ -207,10 +207,10 @@ class DetectController extends Controller
             }
         } else {
             if ($dns_history_connection_status) {
-                echo "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
+                echo "\e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             } else {
                 $this->results['method_1'] = "Connection Error";
-                echo "    \e[1;31;40m[*] Result : \e[1;36;40mConnection Error\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
+                echo "\e[1;31;40m[*] Result : \e[1;36;40mConnection Error\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             }
         }
 
@@ -219,7 +219,7 @@ class DetectController extends Controller
 
     public function method2($hostname)
     {
-        echo PHP_EOL . "    \e[1;31;40m[*] Method 2 : \e[1;36;40mChecking Guardiran SSL Certificate Database (" . number_format($this->private_db_status['ssl_db']) . " Records)" . PHP_EOL . "\e[1;37;40m    ";
+        echo PHP_EOL . "    \e[1;31;40m[*] Method 2 : \e[1;36;40mChecking Guardiran SSL Certificate Database (" . number_format($this->private_db_status['ssl_db']) . " Records) \e[1;37;40m" . PHP_EOL . "    ";
 
         sleep(1);
 
@@ -262,7 +262,7 @@ class DetectController extends Controller
     public function method3($hostname)
     {
 
-        echo PHP_EOL . "    \e[1;31;40m[*] Method 3 : \e[1;36;40mCross-Site Port Attack" . PHP_EOL . "\e[1;37;40m    ";
+        echo PHP_EOL . "    \e[1;31;40m[*] Method 3 : \e[1;36;40mCross-Site Port Attack \e[1;37;40m" . PHP_EOL . "    ";
 
         sleep(1);
 
