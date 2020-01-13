@@ -64,17 +64,17 @@ class SubDomainController extends Controller
 
 
         $trigger = 100;
-        $i = 0;
-        $this->counter($i + 1);
+        $i = 1;
+        $this->counter($i);
 
         foreach ($this->subdomains as $val) {
 
             if ($i == $trigger) {
-                $this->counter($i + 1);
+                $this->counter($i);
                 $trigger += 100;
             }
 
-            if ($this->subdomains_count - 1 == $i) {
+            if ($this->subdomains_count == $i) {
                 $this->counter($i);
             }
 
