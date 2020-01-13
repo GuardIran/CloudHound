@@ -65,6 +65,8 @@ class SubDomainController extends Controller
 
         $trigger = 100;
         $i = 1;
+
+        echo PHP_EOL . "    ";
         $this->counter($i);
 
         foreach ($this->subdomains as $val) {
@@ -110,7 +112,7 @@ class SubDomainController extends Controller
 
     public function counter($counter)
     {
-        $text = PHP_EOL . "    \e[1;36;40m[" . $counter . "/" . $this->subdomains_count . "]\e[1;37;40m" . PHP_EOL;
+        $text =  "\e[1;36;40m[" . $counter . "/" . $this->subdomains_count . "]" . PHP_EOL . PHP_EOL . "\e[1;37;40m    ";
 
         echo $text;
 
