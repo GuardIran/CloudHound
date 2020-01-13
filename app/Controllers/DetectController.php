@@ -309,7 +309,7 @@ class DetectController extends Controller
 
     public function method4($hostname)
     {
-        echo PHP_EOL . "    \e[1;31;40m[*] Method 4 : \e[1;36;40mCheck Sub domains" . PHP_EOL . "\e[1;37;40m    ";
+        echo PHP_EOL . "    \e[1;31;40m[*] Method 4 : \e[1;36;40mCheck Sub domains \e[1;37;40m" . PHP_EOL . "    ";
 
         sleep(1);
 
