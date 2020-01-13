@@ -1,0 +1,63 @@
+{
+      "PROJECT": {
+        "Name": "GuardIran CloudHound",
+        "State": "Production",
+        "Version": "1.0.0",
+        "SDK": "Red Framework Console Application",
+        "Language": "en",
+        "Programmer": "RedCoder, RT3N",
+        "SecretKey": "RedCoder_FrameWorK762",
+        "Timezone": "Asia/Tehran",
+        "Cache": "off"
+      },
+
+      "DEBUG": {
+        "Errors": "on"
+      },
+
+      "DATABASE_1": {
+        "Status": "off",
+        "Driver": "mysql",
+        "Host": "localhost",
+        "Port": "3306",
+        "Name": "red",
+        "User": "root",
+        "Password": "red",
+        "Charset": "utf8",
+        "Backup": "off",
+        "BackupTime": "23",
+        "Migration": "off"
+      },
+
+      "DATABASE_2": {
+         "Status": "off",
+         "Driver": "sqlsrv",
+         "Host": "localhost",
+         "Port": "3306",
+         "Name": "red",
+         "User": "root",
+         "Password": "red",
+         "Charset": "utf8",
+         "Backup": "off",
+         "BackupTime": "23",
+         "Migration": "off"
+      },
+
+      "DATABASE_3": {
+        "Status": "on",
+        "Driver": "sqlite",
+        "Name": "CloudHound",
+        "Charset": "utf8",
+        "Backup": "off",
+        "BackupTime": "23",
+        "Migration": "off"
+    },
+
+      "MAIL_SERVER": {
+         "Status": "off",
+         "Host": "smtp.localhost",
+         "Port": "2456",
+         "Username" : "red@localhost",
+         "Password" : "red"
+      }
+}

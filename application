@@ -1,0 +1,14 @@
+<?php
+
+use App\Bootstrap\Bootstrap;
+
+
+
+require 'vendor/autoload.php';
+require_once 'config/path.php';
+require_once 'vendor/redframework/console-core/src/Red/Helpers/Helpers.php';
+
+
+$Bootstrap = new Bootstrap();
+
+$Bootstrap->run();

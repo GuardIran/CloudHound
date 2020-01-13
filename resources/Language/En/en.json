@@ -1,0 +1,29 @@
+
+{
+  "en":
+  {
+    "validate":
+    {
+      "empty" : "%s Shouldn't Be Empty",
+      "invalid_digit": "%s Should Contain Only Digit and Be Between %u to %u Letters",
+      "invalid_email": "Email Should Be Valid and Be Between %u to %u Letters",
+      "invalid_IP": "IP Address is Invalid",
+      "invalid_phone": "Phone Number Should Be Valid and Be Between %u to %u Letters",
+      "invalid_address" : "Post Address Should Contain Only English, Persian, Digits, Special Character (-) and Be Between %u to %u Letters",
+      "invalid_address_en" : "Post Address Should Contain Only English, Digits, Special Character (-) and Be Between %u to %u Letters",
+      "invalid_address_fa" : "Post Address Should Contain Only Persian, Digits, Special Character (-) and Be Between %u to %u Letters",
+      "invalid_username" : "Username Should Contain Only English, Digits, Special Characters (.-_) and Be Between %u to %u Letters",
+      "invalid_password" : "Password Should Contain Only English, Digits, Special Characters (.@*) and Be Between %u to %u Letters",
+      "invalid_lang_en" : "%s Should Contain Only English and Be Between %u to %u Letters ",
+      "invalid_lang_enDigit" : "%s Should Contain Only English, Digits and Be Between %u to %u Letters",
+      "invalid_lang_fa" : "%s Should Contain Only Persian and Be Between %u to %u Letters",
+      "invalid_lang_faDigit" : "%s Should Contain Only Persian, Digits and Be Between %u to %u Letters",
+      "invalid_lang_mix" : "%s Should Contain Only English, Persian, Digits and Be Between %u to %u Letters",
+      "invalid_text" : "Text Should Contain Only English, Persian, Digits, Special Characters (.-_,،;؛!؟@) and Be Between %u to %u Letters",
+      "invalid_text_en" : "Text Should Contain Only English, Digits, Special Characters (.-_,،;؛!؟@) and Be Between %u to %u Letters",
+      "invalid_text_fa" : "Text Should Contain Only Persian, Digits, Special Characters (.-_,،;؛!؟@) and Be Between %u to %u Letters"
+    }
+  }
+
+
+}

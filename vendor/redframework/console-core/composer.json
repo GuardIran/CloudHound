@@ -1,0 +1,33 @@
+{
+  "name": "redframework/console-core",
+  "description": "The Red Framework.",
+  "keywords": [
+    "redframework",
+    "framework",
+    "console-application",
+    "php"
+  ],
+  "license": "MIT",
+  "homepage": "http://redframework.ir",
+  "support": {
+    "issues": "https://github.com/redframework/console-core/issues",
+    "source": "https://github.com/redframework/console-core"
+  },
+  "authors": [
+    {
+      "name": "Mahbod Azizkhani",
+      "email": "antagunist@gmail.com"
+    }
+  ],
+
+  "autoload": {
+    "psr-4": {
+      "Red\\": "src/Red/"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

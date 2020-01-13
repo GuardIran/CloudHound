@@ -1,0 +1,14 @@
+{
+  "Product": {
+    "Name": "Red Framework Console App Development Kit",
+    "Website": "http://redframework.ir",
+    "Developer": "RedCoder",
+    "Contact": "mzero651@gmail.com",
+    "Version" : "1.0.1",
+    "State": "Release"
+  },
+
+  "Requirements": {
+    "PHP": "5 - 7.*"
+  }
+}

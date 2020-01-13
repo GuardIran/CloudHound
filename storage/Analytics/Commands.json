@@ -1,0 +1,1 @@
+{"detect":{"action":"DetectController@detect","parameters":["guardiran.org"]},"whois":{"action":"WhoisController@whois","parameters":["guardiran.org"]},"help":{"action":"HelpController@help"},"exit":{"action":{}}}
