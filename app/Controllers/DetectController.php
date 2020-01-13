@@ -322,6 +322,15 @@ class DetectController extends Controller
         $subdomains_number = trim($subdomains_number);
 
         if (Validate::validate($subdomains_number, "required|method:digit|limit:1-20")) {
+
+            $subdomains_number = (int) $subdomains_number;
+
+            if ($subdomains_number > $sub_domain->getSubDomainCount()) {
+                $subdomains_number = $sub_domain->getSubDomainCount();
+            } else if ($subdomains_number < 1) {
+                $subdomains_number = 1;
+            }
+
             $sub_domain->sliceSubdomains($subdomains_number);
             $sub_domain_check_result = $sub_domain->subDomainCheckUp($hostname);
         } else {
