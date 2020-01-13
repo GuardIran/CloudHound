@@ -33,18 +33,20 @@ class DetectController extends Controller
         $hostname = str_replace("www.", "", $hostname);
         $hostname = trim($hostname, "/");
 
+        echo PHP_EOL . "\e[1;37;40m    ";
+
         if (!Validate::validate($hostname, "required|method:domain|limit:1-63")) {
-            echo PHP_EOL . "    \e[1;31;40m[-] Wrong Hostname !\e[1;37;40m" . PHP_EOL;
+            echo "\e[1;31;40m[-] Wrong Hostname !\e[1;37;40m" . PHP_EOL;
             return false;
         }
 
         if (!$this->isConnected()) {
-            echo PHP_EOL . "    \e[1;31;40m[-] No Internet Connection !\e[1;37;40m" . PHP_EOL;
+            echo "\e[1;31;40m[-] No Internet Connection !\e[1;37;40m" . PHP_EOL;
             return false;
         }
 
         if ($this->isConnected() && !$this->serverUp()) {
-            echo PHP_EOL . "    \e[1;31;40m[-] API Server is Down Temporary , Please Try Again Later .\e[1;37;40m" . PHP_EOL;
+            echo "\e[1;31;40m[-] API Server is Down Temporary , Please Try Again Later .\e[1;37;40m" . PHP_EOL;
             return false;
         }
 
@@ -64,7 +66,7 @@ class DetectController extends Controller
 
     public function normalDetection($hostname, $server_ip)
     {
-        echo PHP_EOL . "    \e[1;31;40m[*] Server IP Detected - No CloudFlare Protection" . PHP_EOL . PHP_EOL .
+        echo "\e[1;31;40m[*] Server IP Detected - No CloudFlare Protection" . PHP_EOL . PHP_EOL .
 
             "\t\e[1;31;40m[+] Hostname : \e[1;36;40m" . $hostname . PHP_EOL . PHP_EOL .
 
@@ -79,11 +81,11 @@ class DetectController extends Controller
         $this->private_db_status = $this->database_controller->DatabaseStatus();
 
 
-        echo PHP_EOL . "    \e[1;31;40m[!] CloudFlare IP : \e[1;36;40m" . $cloudflare_ip . PHP_EOL . PHP_EOL;
+        echo "\e[1;31;40m[!] CloudFlare IP : \e[1;36;40m" . $cloudflare_ip . PHP_EOL . PHP_EOL . "\e[1;37;40m    ";
 
         sleep(1);
 
-        echo "    \e[1;31;40m[*] Trying to Detect Original IP : " . PHP_EOL . PHP_EOL;
+        echo "\e[1;31;40m[*] Trying to Detect Original IP : " . PHP_EOL . PHP_EOL . "\e[1;37;40m    ";
 
         sleep(1);
 
@@ -171,7 +173,7 @@ class DetectController extends Controller
 
     public function method1($hostname)
     {
-        echo "    [*] Method 1 : \e[1;36;40mChecking Guardiran DNS History Database (" . number_format($this->private_db_status['ip_db']) . " Records)" . PHP_EOL . PHP_EOL;
+        echo "\e[1;31;40m[*] Method 1 : \e[1;36;40mChecking Guardiran DNS History Database (" . number_format($this->private_db_status['ip_db']) . " Records)" . PHP_EOL . PHP_EOL . "\e[1;37;40m    ";
 
         sleep(1);
 
@@ -180,7 +182,7 @@ class DetectController extends Controller
         $dns_history_connection_status = $DNSHistory->getConnectionStatus();
 
         if ($dns_history_method_result != NULL && $dns_history_method_result != "false" && is_array($dns_history_method_result)) {
-            echo "    \e[1;31;40m[*] Result : " . PHP_EOL . PHP_EOL .
+            echo "\e[1;31;40m[*] Result : " . PHP_EOL . PHP_EOL .
 
                 "\t\e[1;31;40mDirect IP Found !" . PHP_EOL . PHP_EOL .
 
@@ -205,10 +207,10 @@ class DetectController extends Controller
             }
         } else {
             if ($dns_history_connection_status) {
-                echo "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL;
+                echo "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             } else {
                 $this->results['method_1'] = "Connection Error";
-                echo "    \e[1;31;40m[*] Result : \e[1;36;40mConnection Error\e[1;37;40m" . PHP_EOL;
+                echo "    \e[1;31;40m[*] Result : \e[1;36;40mConnection Error\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             }
         }
 
@@ -217,7 +219,7 @@ class DetectController extends Controller
 
     public function method2($hostname)
     {
-        echo PHP_EOL . "    \e[1;31;40m[*] Method 2 : \e[1;36;40mChecking Guardiran SSL Certificate Database (" . number_format($this->private_db_status['ssl_db']) . " Records)" . PHP_EOL;
+        echo PHP_EOL . "    \e[1;31;40m[*] Method 2 : \e[1;36;40mChecking Guardiran SSL Certificate Database (" . number_format($this->private_db_status['ssl_db']) . " Records)" . PHP_EOL . "\e[1;37;40m    ";
 
         sleep(1);
 
@@ -226,7 +228,7 @@ class DetectController extends Controller
         $ssl_checkup_connection_status = $SSLCheckUp->getConnectionStatus();
 
         if ($ssl_checkup_method_result != NULL && $ssl_checkup_method_result != "false" && is_array($ssl_checkup_method_result)) {
-            echo PHP_EOL . "    \e[1;31;40m[*] Result :" . PHP_EOL . PHP_EOL .
+            echo PHP_EOL . "\e[1;31;40m[*] Result :" . PHP_EOL . PHP_EOL .
 
                 "\t\e[1;31;40mDirect IP Found !" . PHP_EOL . PHP_EOL .
 
@@ -247,10 +249,10 @@ class DetectController extends Controller
             }
         } else {
             if ($ssl_checkup_connection_status) {
-                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL;
+                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             } else {
                 $this->results['method_2'] = "Connection Error";
-                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mConnection Error\e[1;37;40m" . PHP_EOL;
+                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mConnection Error\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             }
         }
 
@@ -260,7 +262,7 @@ class DetectController extends Controller
     public function method3($hostname)
     {
 
-        echo PHP_EOL . "    \e[1;31;40m[*] Method 3 : \e[1;36;40mCross-Site Port Attack" . PHP_EOL;
+        echo PHP_EOL . "    \e[1;31;40m[*] Method 3 : \e[1;36;40mCross-Site Port Attack" . PHP_EOL . "\e[1;37;40m    ";
 
         sleep(1);
 
@@ -290,15 +292,15 @@ class DetectController extends Controller
                     $this->results['method_3'] = $xsp_attack_result['main'];
                 }
             } else {
-                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL;
+                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             }
 
         } else {
             if ($xsp_attack_connection_status) {
-                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL;
+                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             } else {
                 $this->results['method_3'] = "Connection Error";
-                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mConnection Error\e[1;37;40m" . PHP_EOL;
+                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mConnection Error\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             }
         }
 
@@ -307,7 +309,7 @@ class DetectController extends Controller
 
     public function method4($hostname)
     {
-        echo PHP_EOL . "    \e[1;31;40m[*] Method 4 : \e[1;36;40mCheck Sub domains" . PHP_EOL . PHP_EOL;
+        echo PHP_EOL . "    \e[1;31;40m[*] Method 4 : \e[1;36;40mCheck Sub domains" . PHP_EOL . "\e[1;37;40m    ";
 
         sleep(1);
 
@@ -315,7 +317,7 @@ class DetectController extends Controller
 
         $sub_domain_check_connection_status = $sub_domain->getConnectionStatus();
 
-        echo "    \e[1;37;40mChoose Number to Start Subdomain Scan (1 - " . $sub_domain->getSubDomainCount() . ")" . PHP_EOL . PHP_EOL;
+        echo PHP_EOL . "    \e[1;37;40mChoose Number to Start Subdomain Scan (1 - " . $sub_domain->getSubDomainCount() . ")" . PHP_EOL . PHP_EOL;
         echo "    → ";
         $handler = fopen("php://stdin", "r");
         $subdomains_number = fgets($handler);
@@ -355,10 +357,10 @@ class DetectController extends Controller
                 "\t\e[1;31;40m[+] Sub domain : \e[1;36;40m" . $sub_domain_check_result['subdomain'] . "\e[1;37;40m" . PHP_EOL;
         } else {
             if ($sub_domain_check_connection_status) {
-                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL;
+                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             } else {
                 $this->results['method_4'] = "Connection Error";
-                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mConnection Error\e[1;37;40m" . PHP_EOL;
+                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mConnection Error\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             }
         }
 
@@ -370,7 +372,7 @@ class DetectController extends Controller
     {
         $perc = round(($done * 100) / $total);
         $bar = round(($width * $perc) / 100);
-        echo PHP_EOL . "    " . sprintf("%s%% [%s>%s]%s\r", $perc, str_repeat("=", $bar), str_repeat(" ", $width - $bar), $info) . PHP_EOL;
+        echo PHP_EOL . "    " . sprintf("%s%% [%s>%s]%s\r", $perc, str_repeat("=", $bar), str_repeat(" ", $width - $bar), $info) . PHP_EOL . "    ";
     }
 
     public function isConnected()
