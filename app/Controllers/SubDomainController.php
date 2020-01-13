@@ -17,11 +17,13 @@ class SubDomainController extends Controller
 {
 
     private $hostname;
-    private $subdomains;
+    private $subdomains = array();
+    private $subdomains_count;
     private $sqlite_extension;
     private $connection_status;
+
     /**
-     * @var SubDomainModel $this ->model
+     * @var SubDomainModel $this->model
      */
 
     protected $model;
@@ -39,6 +41,13 @@ class SubDomainController extends Controller
         parent::__construct();
         $this->hostname = $hostname;
         $this->subdomains = $this->model->fetchSubDomainList();
+        $this->subdomains_count = count($this->subdomains);
+
+        if (!$this->isConnected()) {
+            $this->connection_status = false;
+        } else {
+            $this->connection_status = true;
+        }
 
     }
 
@@ -54,26 +63,19 @@ class SubDomainController extends Controller
         }
 
 
-        $sub_domain_count = count($this->subdomains);
         $trigger = 100;
         $i = 0;
-        $this->counter($i, $sub_domain_count);
+        $this->counter($i + 1);
 
         foreach ($this->subdomains as $val) {
 
             if ($i == $trigger) {
-                $this->counter($i, $sub_domain_count);
+                $this->counter($i + 1);
                 $trigger += 100;
             }
 
-            if ($sub_domain_count - 1 == $i) {
-                $this->counter($i, $sub_domain_count);
-
-                if (!$this->isConnected()) {
-                    $this->connection_status = false;
-                } else {
-                    $this->connection_status = true;
-                }
+            if ($this->subdomains_count - 1 == $i) {
+                $this->counter($i);
             }
 
             $url = $val['subdomain'] . "." . $hostname;
@@ -106,12 +108,9 @@ class SubDomainController extends Controller
         return false;
     }
 
-    public function counter($counter, $total)
+    public function counter($counter)
     {
-
-        $text = "
-    [" . $counter . "/ " . $total . "] \r
-    ";
+        $text = PHP_EOL . "    \e[1;36;40m[" . $counter . "/" . $this->subdomains_count . "]\e[1;37;40m" . PHP_EOL;
 
         echo $text;
 
@@ -133,6 +132,15 @@ class SubDomainController extends Controller
     public function getConnectionStatus()
     {
         return $this->connection_status;
+    }
+
+    public function getSubDomainCount(){
+        return $this->subdomains_count;
+    }
+
+    public function sliceSubdomains($length){
+        $this->subdomains = array_slice($this->subdomains, 0, $length - 1);
+        $this->subdomains_count = $length;
     }
 
 }
