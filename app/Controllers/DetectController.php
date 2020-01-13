@@ -77,6 +77,8 @@ class DetectController extends Controller
 
         echo PHP_EOL . "    \e[1;31;40m[!] CloudFlare IP : \e[1;36;40m" . $cloudflare_ip . PHP_EOL . PHP_EOL;
 
+        sleep(1);
+
         echo "    \e[1;31;40m[*] Trying to Detect Original IP : " . PHP_EOL . PHP_EOL;
 
         sleep(1);
