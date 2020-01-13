@@ -47,9 +47,9 @@ class SubDomainController extends Controller
 
         if ($this->sqlite_extension == false) {
             echo PHP_EOL . PHP_EOL . "    \e[1;31;40m[!] pdo_sqlite Extension is Disabled On your PHP Server ." . PHP_EOL . PHP_EOL .
-            "\tin Order to Access Subdomain List from SQLite Database you Have to Go to PHP Folder and Modify php.ini" . PHP_EOL .
-            "\tAnd add the Following Line :" . PHP_EOL .
-            "\textension=pdo_sqlite" . PHP_EOL;
+                "\tin Order to Access Subdomain List from SQLite Database you Have to Go to PHP Folder and Modify php.ini" . PHP_EOL .
+                "\tAnd add the Following Line :" . PHP_EOL .
+                "\textension=pdo_sqlite" . PHP_EOL;
             return false;
         }
 
@@ -61,15 +61,15 @@ class SubDomainController extends Controller
 
         foreach ($this->subdomains as $val) {
 
-            if ($i == $trigger){
+            if ($i == $trigger) {
                 $this->counter($i, $sub_domain_count);
                 $trigger += 100;
             }
 
-            if ($sub_domain_count -1 == $i){
+            if ($sub_domain_count - 1 == $i) {
                 $this->counter($i, $sub_domain_count);
 
-                if (!$this->isConnected()){
+                if (!$this->isConnected()) {
                     $this->connection_status = false;
                 } else {
                     $this->connection_status = true;
@@ -81,13 +81,14 @@ class SubDomainController extends Controller
             $dns_records = @dns_get_record($url, DNS_A);
 
             if ($dns_records) {
-                if (isset($dns_records[0]['ip'])){
-                    if (ProtectionController::cloudFlareIP($dns_records[0]['ip']) == "private_ip"){
-                        $dns_records['server_ip'] = "Private IP - Not Found in Our Whois DB (" . $dns_records[0]['ip'] . ")";
+                if (isset($dns_records[0]['ip'])) {
+                    if (ProtectionController::cloudFlareIP($dns_records[0]['ip'])) {
+                        return false;
+                    } else if (ProtectionController::cloudFlareIP($dns_records[0]['ip']) == "private_ip") {
+                        $dns_records['server_ip'] = "Private IP (" . $dns_records[0]['ip'] . ")";
                         $dns_records['subdomain'] = $url;
                         return $dns_records;
-                    }
-                    else if (ProtectionController::cloudFlareIP($dns_records[0]['ip']) == false) {
+                    } else if (ProtectionController::cloudFlareIP($dns_records[0]['ip']) == false) {
                         $dns_records['server_ip'] = $dns_records[0]['ip'];
                         $dns_records['subdomain'] = $url;
                         return $dns_records;
@@ -101,7 +102,8 @@ class SubDomainController extends Controller
         return false;
     }
 
-    public function counter($counter, $total){
+    public function counter($counter, $total)
+    {
 
         $text = "
     [" . $counter . "/ " . $total . "] \r
