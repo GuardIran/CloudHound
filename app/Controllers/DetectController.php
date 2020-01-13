@@ -27,7 +27,7 @@ class DetectController extends Controller
         $hostname = str_replace("www.", "", $hostname);
         $hostname = trim($hostname, "/");
 
-        if (!Validate::validate($hostname, "required|method:domain|limit:1-63")){
+        if (!Validate::validate($hostname, "required|method:domain|limit:1-63")) {
             echo PHP_EOL . "    \e[1;31;40m[-] Wrong Hostname !\e[1;37;40m" . PHP_EOL;
             return false;
         }
@@ -47,7 +47,7 @@ class DetectController extends Controller
         $organization = $whois_handler->getOrganization();
 
         if ($organization == "Cloudflare, Inc.") {
-            $this->specificDetection($hostname);
+            $this->specificDetection($hostname, $data['query']);
         } else {
             $this->normalDetection($hostname, $data['query']);
         }
@@ -65,7 +65,7 @@ class DetectController extends Controller
             "\t\e[1;31;40m[+] Server IP : \e[1;36;40m" . $server_ip . "\e[1;37;40m" . PHP_EOL;
     }
 
-    public function specificDetection($hostname)
+    public function specificDetection($hostname, $cloudflare_ip)
     {
 
         $database_controller = new DatabaseController();
@@ -75,7 +75,9 @@ class DetectController extends Controller
         $ip_db = $result['ip_db'];
         $ssl_db = $result['ssl_db'];
 
-        echo PHP_EOL . "    \e[1;31;40m[*] Trying to Detect Original IP : " . PHP_EOL . PHP_EOL;
+        echo PHP_EOL . "    \e[1;31;40m[!] CloudFlare IP : \e[1;36;40m" . $cloudflare_ip . PHP_EOL . PHP_EOL;
+
+        echo "    \e[1;31;40m[*] Trying to Detect Original IP : " . PHP_EOL . PHP_EOL;
 
         sleep(1);
 
@@ -240,7 +242,7 @@ class DetectController extends Controller
 
                 "\t\e[1;31;40m[+] Sub domain : \e[1;36;40m" . $sub_domain_check_result['subdomain'] . "\e[1;37;40m" . PHP_EOL;
         } else {
-            if ($sub_domain_check_connection_status){
+            if ($sub_domain_check_connection_status) {
                 echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL;
             } else {
                 $this->results['method_4'] = "Connection Error";
