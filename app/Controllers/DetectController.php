@@ -317,6 +317,12 @@ class DetectController extends Controller
 
         $sub_domain_check_connection_status = $sub_domain->getConnectionStatus();
 
+        if (!$sub_domain_check_connection_status) {
+            $this->results['method_4'] = "Connection Error";
+            echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mConnection Error\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
+            return false;
+        }
+
         echo PHP_EOL . "    \e[1;37;40mChoose Number to Start Subdomain Scan (1 - " . $sub_domain->getSubDomainCount() . ")" . PHP_EOL . PHP_EOL;
         echo "    → ";
         $handler = fopen("php://stdin", "r");
@@ -325,7 +331,7 @@ class DetectController extends Controller
 
         if (Validate::validate($subdomains_number, "required|method:digit|limit:1-20")) {
 
-            $subdomains_number = (int) $subdomains_number;
+            $subdomains_number = (int)$subdomains_number;
 
             if ($subdomains_number > $sub_domain->getSubDomainCount()) {
                 $subdomains_number = $sub_domain->getSubDomainCount();
@@ -356,12 +362,7 @@ class DetectController extends Controller
 
                 "\t\e[1;31;40m[+] Sub domain : \e[1;36;40m" . $sub_domain_check_result['subdomain'] . "\e[1;37;40m" . PHP_EOL;
         } else {
-            if ($sub_domain_check_connection_status) {
-                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
-            } else {
-                $this->results['method_4'] = "Connection Error";
-                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mConnection Error\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
-            }
+            echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
         }
 
         return true;
