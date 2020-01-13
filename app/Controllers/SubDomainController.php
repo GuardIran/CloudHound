@@ -112,7 +112,7 @@ class SubDomainController extends Controller
 
     public function counter($counter)
     {
-        $text =  "\e[1;36;40m[" . $counter . "/" . $this->subdomains_count . "]" . PHP_EOL . PHP_EOL . "\e[1;37;40m    ";
+        $text =  "\e[1;36;40m[" . $counter . "/" . $this->subdomains_count . "] \e[1;37;40m" . PHP_EOL . PHP_EOL . "    ";
 
         echo $text;
 
@@ -141,7 +141,7 @@ class SubDomainController extends Controller
     }
 
     public function sliceSubdomains($length){
-        $this->subdomains = array_slice($this->subdomains, 0, $length - 1);
+        $this->subdomains = array_slice($this->subdomains, 0, $length);
         $this->subdomains_count = $length;
     }
 
