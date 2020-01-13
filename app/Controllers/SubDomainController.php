@@ -82,16 +82,16 @@ class SubDomainController extends Controller
 
             if ($dns_records) {
                 if (isset($dns_records[0]['ip'])) {
-					
-					$cloudflare_status = ProtectionController::cloudFlareIP($dns_records[0]['ip']);
-					
-                    if (cloudflare_status) {
+
+                    $cloudflare_status = ProtectionController::cloudFlareIP($dns_records[0]['ip']);
+
+                    if ($cloudflare_status) {
                         continue;
-                    } else if (cloudflare_status == "private_ip") {
+                    } else if ($cloudflare_status == "private_ip") {
                         $dns_records['server_ip'] = "Private IP (" . $dns_records[0]['ip'] . ")";
                         $dns_records['subdomain'] = $url;
                         return $dns_records;
-                    } else if (cloudflare_status == false) {
+                    } else if ($cloudflare_status == false) {
                         $dns_records['server_ip'] = $dns_records[0]['ip'];
                         $dns_records['subdomain'] = $url;
                         return $dns_records;
