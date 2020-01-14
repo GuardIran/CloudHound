@@ -35,17 +35,17 @@ class WhoisController extends Controller
         echo PHP_EOL . "\e[1;37;40m    ";
 
         if (!Validate::validate($hostname, "required|method:domain|limit:1-63") && !Validate::validate($hostname, "required|method:IP|limit:0-0")){
-            echo "\e[1;31;40m[-] Wrong Hostname !\e[1;37;40m" . PHP_EOL;
+            echo "\e[1;31;40m[!] Wrong Hostname\e[1;37;40m" . PHP_EOL;
             return false;
         }
 
         if (!$this->isConnected()) {
-            echo "\e[1;31;40m[-] No Internet Connection !\e[1;37;40m" . PHP_EOL;
+            echo "\e[1;31;40m[!] No Internet Connection\e[1;37;40m" . PHP_EOL;
             return false;
         }
 
         if (!$this->serverUp()) {
-            echo "\e[1;31;40m[-] API Server is Down Temporary , Please Try Again Later .\e[1;37;40m" . PHP_EOL;
+            echo "\e[1;31;40m[!] API Server is Down Temporary , Please Try Again Later .\e[1;37;40m" . PHP_EOL;
             return false;
         }
 
@@ -96,12 +96,12 @@ class WhoisController extends Controller
 
                 return true;
             } else {
-                echo "\e[1;31;40m[-] Whois Lookup Failed - Check Your Hostname Again !\e[1;37;40m" . PHP_EOL;
+                echo "\e[1;31;40m[!] Whois Lookup Failed - Check Your Hostname Again\e[1;37;40m" . PHP_EOL;
                 return false;
             }
 
         } else {
-            echo "\e[1;31;40m[-] Whois Lookup Failed - Check Your Hostname Again !\e[1;37;40m" . PHP_EOL;
+            echo "\e[1;31;40m[!] Whois Lookup Failed - Check Your Hostname Again\e[1;37;40m" . PHP_EOL;
             return false;
         }
 
@@ -131,7 +131,11 @@ class WhoisController extends Controller
         } else {
             $this->data = $this->data->getBody();
             $this->data = json_decode($this->data, true);
-            return $this->data;
+            if ($this->data['status'] == "success"){
+                return $this->data;
+            } else {
+                return false;
+            }
         }
 
     }
