@@ -12,6 +12,7 @@ namespace App\Controllers;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Exception\ConnectException;
 use Red\Base\Controller;
 use Red\ValidateService\Validate;
 
@@ -34,7 +35,7 @@ class WhoisController extends Controller
 
         echo PHP_EOL . "\e[1;37;40m    ";
 
-        if (!Validate::validate($hostname, "required|method:domain|limit:1-63") && !Validate::validate($hostname, "required|method:IP|limit:0-0")){
+        if (!Validate::validate($hostname, "required|method:domain|limit:1-63") && !Validate::validate($hostname, "required|method:IP|limit:0-0")) {
             echo "\e[1;31;40m[!] Wrong Hostname\e[1;37;40m" . PHP_EOL;
             return false;
         }
@@ -131,7 +132,7 @@ class WhoisController extends Controller
         } else {
             $this->data = $this->data->getBody();
             $this->data = json_decode($this->data, true);
-            if ($this->data['status'] == "success"){
+            if ($this->data['status'] == "success") {
                 return $this->data;
             } else {
                 return false;
@@ -143,7 +144,7 @@ class WhoisController extends Controller
 
     public function getOrganization()
     {
-        if(isset($this->data['org'])){
+        if (isset($this->data['org'])) {
             return $this->data['org'];
         } else {
             return false;
@@ -164,12 +165,27 @@ class WhoisController extends Controller
 
     public function serverUp()
     {
-        if ($this->isConnected()) {
-            $connected = @fsockopen("www.guardiran.org", 80);
-            if ($connected) {
-                fclose($connected);
-                return true;
-            }
+
+        $headers = ["content-type" => "application/json;charset=UTF-8",
+            "API" => "guardiran"];
+
+        $result = true;
+
+        try {
+            $connection = new Client([
+                'base_uri' => "api.guardiran.org",
+                'headers' => $headers,
+            ]);
+            $connection->request('GET');
+        } catch (BadResponseException $e) {
+            $result = false;
+        } catch (ConnectException $e) {
+            $result = false;
+        }
+
+        if ($result) {
+            return true;
+        } else {
             return false;
         }
     }
