@@ -439,7 +439,7 @@ class DetectController extends Controller
 
         try {
             $connection = new Client([
-                'base_uri' => "api.guardiran.org",
+                'base_uri' => "http://api.guardiran.org",
                 'headers' => $headers,
             ]);
             $connection->request('GET');
