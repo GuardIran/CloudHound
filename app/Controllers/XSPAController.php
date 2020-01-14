@@ -20,7 +20,9 @@ class XSPAController extends Controller
     private $api_service;
     private $connection;
     private $connection_status;
-    protected $data;
+    private $hostname;
+    private $phase1_result;
+    private $secret_key;
 
 
     public function __construct()
@@ -39,6 +41,8 @@ class XSPAController extends Controller
         $hostname = str_replace("www.", "", $hostname);
         $hostname = trim($hostname, "/");
 
+        $this->hostname = $hostname;
+
         $discovery_target = str_replace("https://", "", $discovery_target);
         $discovery_target = str_replace("http://", "", $discovery_target);
         $discovery_target = str_replace("www.", "", $discovery_target);
@@ -48,7 +52,7 @@ class XSPAController extends Controller
         $discovery_hostname = substr($discovery_target, 0, strlen($hostname) + 1);
 
         if ($hostname . "/" != $discovery_hostname) {
-            return "wrong_discovery_target";
+            return ["status" => "wrong_discovery_target"];
         }
 
         $headers = ["content-type" => "application/json;charset=UTF-8",
@@ -56,7 +60,7 @@ class XSPAController extends Controller
 
 
         try {
-            $this->data = $this->connection->request('POST', "v1/xspa/" . $hostname . "/" . $discovery_target,
+            $this->phase1_result = $this->connection->request('POST', "v1/xspa/" . $hostname,
                 [
                     'headers' => $headers,
                     'form_params' => [
@@ -65,9 +69,9 @@ class XSPAController extends Controller
                 ]
             );
         } catch (BadResponseException $e) {
-            $this->data = "false";
+            $this->phase1_result = "false";
         } catch (ConnectException $e) {
-            $this->data = "false";
+            $this->phase1_result = "false";
             $this->connection_status = false;
         }
 
@@ -77,14 +81,57 @@ class XSPAController extends Controller
 
         $this->connection_status = true;
 
-        if ($this->data == "false") {
+        if ($this->phase1_result == "false") {
             return false;
         } else {
-            $this->data = $this->data->getBody();
-            $this->data = json_decode($this->data, true);
-            return $this->data;
+
+            $this->phase1_result = (string) $this->phase1_result->getBody();
+
+            $this->phase1_result = json_decode($this->phase1_result, true);
+
+
+            $this->secret_key = $this->phase1_result['secret_key'];
+
+
+            return $this->phase1_result;
         }
 
+    }
+
+    public function getResult()
+    {
+
+        $headers = ["content-type" => "application/json;charset=UTF-8",
+            "API" => "guardiran"];
+
+        try {
+            $result = $this->connection->request('GET', "v1/xspa-result/" . $this->secret_key,
+                [
+                    'headers' => $headers,
+                ]
+            );
+        } catch (BadResponseException $e) {
+            $result = "false";
+        } catch (ConnectException $e) {
+            $result = "false";
+            $this->connection_status = false;
+        }
+
+        if ($this->connection_status === false) {
+            return "Connection Error";
+        }
+
+        $this->connection_status = true;
+
+        if ($result == "false") {
+            return [
+                'status' => "fail",
+                'result' => null,
+                ];
+        } else {
+            $result = (string) $result->getBody();
+            return json_decode($result, true);
+        }
     }
 
     /**
