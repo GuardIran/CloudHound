@@ -36,22 +36,28 @@ class DetectController extends Controller
         echo PHP_EOL . "\e[1;37;40m    ";
 
         if (!Validate::validate($hostname, "required|method:domain|limit:1-63")) {
-            echo "\e[1;31;40m[-] Wrong Hostname !\e[1;37;40m" . PHP_EOL;
+            echo "\e[1;31;40m[!] Wrong Hostname\e[1;37;40m" . PHP_EOL;
             return false;
         }
 
         if (!$this->isConnected()) {
-            echo "\e[1;31;40m[-] No Internet Connection !\e[1;37;40m" . PHP_EOL;
+            echo "\e[1;31;40m[!] No Internet Connection\e[1;37;40m" . PHP_EOL;
             return false;
         }
 
         if ($this->isConnected() && !$this->serverUp()) {
-            echo "\e[1;31;40m[-] API Server is Down Temporary , Please Try Again Later .\e[1;37;40m" . PHP_EOL;
+            echo "\e[1;31;40m[!] API Server is Down Temporary , Please Try Again Later .\e[1;37;40m" . PHP_EOL;
             return false;
         }
 
         $whois_handler = new WhoisController();
         $data = $whois_handler->fetchData($hostname);
+
+        if (!$data) {
+            echo "\e[1;31;40m[!] Wrong Host\e[1;37;40m" . PHP_EOL;
+            return false;
+        }
+
         $organization = $whois_handler->getOrganization();
 
         if ($organization == "Cloudflare, Inc.") {
@@ -266,11 +272,24 @@ class DetectController extends Controller
 
         sleep(1);
 
+        echo PHP_EOL . "    Enter Full URL of a Post On Target's Blog (Leave it Blank if Not Available)" . PHP_EOL . PHP_EOL;
+
+        echo "    → ";
+        $handler = fopen("php://stdin", "r");
+        $blog_post_address = fgets($handler);
+        $blog_post_address = trim($blog_post_address);
+
+        if ($blog_post_address == null || $blog_post_address == false) {
+            $this->results['method_3'] = "UnChecked";
+            echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mUnChecked\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
+            return "UnChecked";
+        }
+
         $XSPA = new XSPAController();
-        $xsp_attack_result = $XSPA->XSPA($hostname);
+        $xsp_attack_result = $XSPA->XSPA($hostname, $blog_post_address);
         $xsp_attack_connection_status = $XSPA->getConnectionStatus();
 
-        if ($xsp_attack_result != NULL && $xsp_attack_result != "false" && is_array($xsp_attack_result)) {
+        if ($xsp_attack_result != NULL && $xsp_attack_result != "false" && $xsp_attack_result != "wrong_discovery_target" && is_array($xsp_attack_result)) {
             if (isset($xsp_attack_result['main'])) {
                 echo PHP_EOL . "    \e[1;31;40m[*] Result :" . PHP_EOL . PHP_EOL .
 
@@ -296,7 +315,12 @@ class DetectController extends Controller
             }
 
         } else {
-            if ($xsp_attack_connection_status) {
+            $this->results['method_3'] = "UnChecked";
+            if ($xsp_attack_result == "wrong_discovery_target") {
+                echo PHP_EOL . "    \e[1;31;40m[!] Wrong Discovery Target \e[1;37;40m" . PHP_EOL . "    ";
+                sleep(1);
+                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mUnChecked\e[1;37;40m" . PHP_EOL . "    ";
+            } else if ($xsp_attack_connection_status) {
                 echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             } else {
                 $this->results['method_3'] = "Connection Error";
@@ -343,8 +367,9 @@ class DetectController extends Controller
             $sub_domain_check_result = $sub_domain->subDomainCheckUp($hostname);
         } else {
             $this->results['method_4'] = "UnChecked";
-            echo PHP_EOL . "    \e[1;31;40m[-] Wrong Input " . PHP_EOL . PHP_EOL;
-            echo "    \e[1;31;40m[*] Result : \e[1;36;40mUnChecked\e[1;37;40m" . PHP_EOL;
+            echo PHP_EOL . "    \e[1;31;40m[!] Wrong Input \e[1;37;40m" . PHP_EOL . "    ";
+            sleep(1);
+            echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mUnChecked \e[1;37;40m" . PHP_EOL . "    ";
             return false;
         }
 
