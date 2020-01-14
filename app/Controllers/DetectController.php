@@ -10,6 +10,9 @@
 namespace App\Controllers;
 
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Exception\ConnectException;
 use Red\Base\Controller;
 use Red\ValidateService\Validate;
 
@@ -187,14 +190,15 @@ class DetectController extends Controller
         $dns_history_method_result = $DNSHistory->DNSHistory($hostname);
         $dns_history_connection_status = $DNSHistory->getConnectionStatus();
 
-        if ($dns_history_method_result != NULL && $dns_history_method_result != "false" && is_array($dns_history_method_result)) {
+        if ($dns_history_method_result['status'] != "fail") {
+
             echo "\e[1;31;40m[*] Result : " . PHP_EOL . PHP_EOL .
 
                 "\t\e[1;31;40mDirect IP Found !" . PHP_EOL . PHP_EOL .
 
-                "\t\e[1;31;40m[+] Original IP : \e[1;36;40m" . $dns_history_method_result[0]["ip"] . PHP_EOL . PHP_EOL .
+                "\t\e[1;31;40m[+] Original IP : \e[1;36;40m" . $dns_history_method_result['result'][0]["ip"] . PHP_EOL . PHP_EOL .
 
-                "\t\e[1;31;40m[+] Date : \e[1;36;40m" . $dns_history_method_result[0]["date"] . "\e[1;37;40m" . PHP_EOL . PHP_EOL;
+                "\t\e[1;31;40m[+] Date : \e[1;36;40m" . $dns_history_method_result['result'][0]["date"] . "\e[1;37;40m" . PHP_EOL . PHP_EOL;
 
 
             echo "    Do you Want to Continue Detection ? (y/n)" . PHP_EOL . PHP_EOL;
@@ -209,7 +213,7 @@ class DetectController extends Controller
                 $this->progressBar(100, 100);
                 return false;
             } else {
-                $this->results['method_1'] = $dns_history_method_result[0]["ip"];
+                $this->results['method_1'] = $dns_history_method_result['result'][0]["ip"];
             }
         } else {
             if ($dns_history_connection_status) {
@@ -233,12 +237,12 @@ class DetectController extends Controller
         $ssl_checkup_method_result = $SSLCheckUp->SSLCheckUp($hostname);
         $ssl_checkup_connection_status = $SSLCheckUp->getConnectionStatus();
 
-        if ($ssl_checkup_method_result != NULL && $ssl_checkup_method_result != "false" && is_array($ssl_checkup_method_result)) {
-            echo PHP_EOL . "\e[1;31;40m[*] Result :" . PHP_EOL . PHP_EOL .
+        if ($ssl_checkup_method_result['status'] != "fail") {
+            echo PHP_EOL . "    \e[1;31;40m[*] Result :" . PHP_EOL . PHP_EOL .
 
                 "\t\e[1;31;40mDirect IP Found !" . PHP_EOL . PHP_EOL .
 
-                "\t\e[1;31;40m[+] Original IP : \e[1;36;40m" . $ssl_checkup_method_result[0]["ip"] . PHP_EOL . PHP_EOL;
+                "\t\e[1;31;40m[+] Original IP : \e[1;36;40m" . $ssl_checkup_method_result['result'][0]["ip"] . "\e[1;37;40m" . PHP_EOL . PHP_EOL;
 
 
             echo "    Do you Want to Continue Detection ? (y/n)" . PHP_EOL . PHP_EOL;
@@ -251,7 +255,7 @@ class DetectController extends Controller
                 $this->progressBar(100, 100);
                 return false;
             } else {
-                $this->results['method_2'] = $ssl_checkup_method_result[0]["ip"];
+                $this->results['method_2'] = $ssl_checkup_method_result['result'][0]["ip"];
             }
         } else {
             if ($ssl_checkup_connection_status) {
@@ -286,16 +290,26 @@ class DetectController extends Controller
         }
 
         $XSPA = new XSPAController();
-        $xsp_attack_result = $XSPA->XSPA($hostname, $discovery_target);
+        $xspa_phase1 = $XSPA->XSPA($hostname, $discovery_target);
         $xsp_attack_connection_status = $XSPA->getConnectionStatus();
 
-        if ($xsp_attack_result != NULL && $xsp_attack_result != "false" && $xsp_attack_result != "wrong_discovery_target" && is_array($xsp_attack_result)) {
-            if (isset($xsp_attack_result['main'])) {
+        if ($xspa_phase1['status'] != "fail" && $xspa_phase1['status'] != "wrong_discovery_target") {
+
+            echo PHP_EOL . "    \e[1;31;40m[*] Running Tests on Target\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
+
+            sleep(30);
+
+            $xspa_result = $XSPA->getResult();
+
+            $xsp_attack_connection_status = $XSPA->getConnectionStatus();
+
+
+            if ($xspa_result['status'] != "fail" && $xsp_attack_connection_status) {
                 echo PHP_EOL . "    \e[1;31;40m[*] Result :" . PHP_EOL . PHP_EOL .
 
                     "\t\e[1;31;40mDirect IP Found !" . PHP_EOL . PHP_EOL .
 
-                    "\t\e[1;31;40m[+] Original IP : \e[1;36;40m" . $xsp_attack_result['main'] . "\e[1;37;40m" . PHP_EOL . PHP_EOL;
+                    "\t\e[1;31;40m[+] Original IP : \e[1;36;40m" . $xspa_result['result'] . "\e[1;37;40m" . PHP_EOL . PHP_EOL;
 
 
                 echo "    Do you Want to Continue Detection ? (y/n)" . PHP_EOL . PHP_EOL;
@@ -308,14 +322,17 @@ class DetectController extends Controller
                     $this->progressBar(100, 100);
                     return false;
                 } else {
-                    $this->results['method_3'] = $xsp_attack_result['main'];
+                    $this->results['method_3'] = $xspa_result['result'];
                 }
+            } else if (!$xsp_attack_connection_status) {
+                $this->results['method_3'] = "Connection Error";
+                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mConnection Error\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             } else {
                 echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             }
 
         } else {
-            if ($xsp_attack_result == "wrong_discovery_target") {
+            if ($xspa_phase1['status'] == "wrong_discovery_target") {
                 $this->results['method_3'] = "UnChecked";
                 echo PHP_EOL . "    \e[1;31;40m[!] Wrong Discovery Target \e[1;37;40m" . PHP_EOL . "    ";
                 sleep(1);
@@ -414,12 +431,29 @@ class DetectController extends Controller
 
     public function serverUp()
     {
-        $connected = @fsockopen("www.guardiran.org", 80);
-        if ($connected) {
-            fclose($connected);
-            return true;
+
+        $headers = ["content-type" => "application/json;charset=UTF-8",
+            "API" => "guardiran"];
+
+        $result = true;
+
+        try {
+            $connection = new Client([
+                'base_uri' => "api.guardiran.org",
+                'headers' => $headers,
+            ]);
+            $connection->request('GET');
+        } catch (BadResponseException $e) {
+            $result = false;
+        } catch (ConnectException $e) {
+            $result = false;
         }
-        return false;
+
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
