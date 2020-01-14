@@ -78,7 +78,7 @@ class Bootstrap
 
         require_once ROOT_PATH . 'commands' . DS . 'commands.php';
 
-        $application_theme = Output::light_green;
+        $application_theme = Output::light_cyan;
 
         Commander::initialize($application_theme);
 
