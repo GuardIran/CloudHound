@@ -276,17 +276,17 @@ class DetectController extends Controller
 
         echo "    → ";
         $handler = fopen("php://stdin", "r");
-        $blog_post_address = fgets($handler);
-        $blog_post_address = trim($blog_post_address);
+        $discovery_target = fgets($handler);
+        $discovery_target = trim($discovery_target);
 
-        if ($blog_post_address == null || $blog_post_address == false) {
+        if ($discovery_target == null || $discovery_target == false) {
             $this->results['method_3'] = "UnChecked";
             echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mUnChecked\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             return "UnChecked";
         }
 
         $XSPA = new XSPAController();
-        $xsp_attack_result = $XSPA->XSPA($hostname, $blog_post_address);
+        $xsp_attack_result = $XSPA->XSPA($hostname, $discovery_target);
         $xsp_attack_connection_status = $XSPA->getConnectionStatus();
 
         if ($xsp_attack_result != NULL && $xsp_attack_result != "false" && $xsp_attack_result != "wrong_discovery_target" && is_array($xsp_attack_result)) {
@@ -315,8 +315,8 @@ class DetectController extends Controller
             }
 
         } else {
-            $this->results['method_3'] = "UnChecked";
             if ($xsp_attack_result == "wrong_discovery_target") {
+                $this->results['method_3'] = "UnChecked";
                 echo PHP_EOL . "    \e[1;31;40m[!] Wrong Discovery Target \e[1;37;40m" . PHP_EOL . "    ";
                 sleep(1);
                 echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mUnChecked\e[1;37;40m" . PHP_EOL . "    ";
