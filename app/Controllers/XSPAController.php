@@ -31,20 +31,42 @@ class XSPAController extends Controller
 
     }
 
-    public function XSPA($hostname)
+    public function XSPA($hostname, $discovery_target)
     {
+
+        $hostname = str_replace("https://", "", $hostname);
+        $hostname = str_replace("http://", "", $hostname);
+        $hostname = str_replace("www.", "", $hostname);
+        $hostname = trim($hostname, "/");
+
+        $discovery_target = str_replace("https://", "", $discovery_target);
+        $discovery_target = str_replace("http://", "", $discovery_target);
+        $discovery_target = str_replace("www.", "", $discovery_target);
+        $discovery_target = trim($discovery_target, "/");
+
+        // To See Discovery Target is Correct or Not
+        $discovery_hostname = substr($discovery_target, 0, strlen($hostname) + 1);
+
+        if ($hostname . "/" != $discovery_hostname) {
+            return "wrong_discovery_target";
+        }
 
         $headers = ["content-type" => "application/json;charset=UTF-8",
             "API" => "guardiran"];
 
 
         try {
-            $this->data = $this->connection->request('GET', "v1/xspa/" . $hostname,
-                ['headers' => $headers]);
-        }
-        catch (BadResponseException $e) {
+            $this->data = $this->connection->request('POST', "v1/xspa/" . $hostname . "/" . $discovery_target,
+                [
+                    'headers' => $headers,
+                    'form_params' => [
+                        'discovery_target' => $discovery_target,
+                    ]
+                ]
+            );
+        } catch (BadResponseException $e) {
             $this->data = "false";
-        } catch (ConnectException $e){
+        } catch (ConnectException $e) {
             $this->data = "false";
             $this->connection_status = false;
         }
