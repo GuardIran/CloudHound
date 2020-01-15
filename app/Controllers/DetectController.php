@@ -106,7 +106,7 @@ class DetectController extends Controller
 
         sleep(1);
 
-        $this->progressBar(20, 100);
+        $this->progressBar(30, 100);
 
         sleep(1);
 
@@ -118,24 +118,11 @@ class DetectController extends Controller
 
         sleep(1);
 
-        $this->progressBar(40, 100);
-
-        sleep(1);
-
-        $continue = $this->method3($hostname);
-
-        if ($continue == false) {
-            return false;
-        }
-
-        sleep(1);
-
         $this->progressBar(60, 100);
 
         sleep(1);
 
-        $this->method4($hostname);
-
+        $this->method3($hostname);
 
         sleep(1);
 
@@ -145,15 +132,13 @@ class DetectController extends Controller
 
         if (count($this->results) > 0) {
 
-            for ($counter = 0; $counter <= 4; $counter++) {
+            for ($counter = 0; $counter <= 3; $counter++) {
                 if (!isset($this->results['method_1'])) {
                     $this->results['method_1'] = "Passed";
                 } else if (!isset($this->results['method_2'])) {
                     $this->results['method_2'] = "Passed";
                 } else if (!isset($this->results['method_3'])) {
                     $this->results['method_3'] = "Passed";
-                } else if (!isset($this->results['method_4'])) {
-                    $this->results['method_4'] = "Passed";
                 }
             }
 
@@ -165,9 +150,7 @@ class DetectController extends Controller
 
                 "\t\e[1;31;40m[+] Method 2 : \e[1;36;40m" . $this->results['method_2'] . PHP_EOL . PHP_EOL .
 
-                "\t\e[1;31;40m[+] Method 3 : \e[1;36;40m" . $this->results['method_3'] . PHP_EOL . PHP_EOL .
-
-                "\t\e[1;31;40m[+] Method 4 : \e[1;36;40m" . $this->results['method_4'] . "\e[1;37;40m" . PHP_EOL;
+                "\t\e[1;31;40m[+] Method 3 : \e[1;36;40m" . $this->results['method_3'] . "\e[1;37;40m" . PHP_EOL;
         } else {
             echo PHP_EOL . "    \e[1;31;40m[!] Detection Failed" . PHP_EOL . PHP_EOL .
 
@@ -227,52 +210,11 @@ class DetectController extends Controller
         return true;
     }
 
+
     public function method2($hostname)
     {
-        echo PHP_EOL . "    \e[1;31;40m[*] Method 2 : \e[1;36;40mChecking Guardiran SSL Certificate Database (" . number_format($this->private_db_status['ssl_db']) . " Records) \e[1;37;40m" . PHP_EOL . "    ";
 
-        sleep(1);
-
-        $SSLCheckUp = new SSLCheckupController();
-        $ssl_checkup_method_result = $SSLCheckUp->SSLCheckUp($hostname);
-        $ssl_checkup_connection_status = $SSLCheckUp->getConnectionStatus();
-
-        if ($ssl_checkup_method_result['status'] != "fail") {
-            echo PHP_EOL . "    \e[1;31;40m[*] Result :" . PHP_EOL . PHP_EOL .
-
-                "\t\e[1;31;40mDirect IP Found !" . PHP_EOL . PHP_EOL .
-
-                "\t\e[1;31;40m[+] Original IP : \e[1;36;40m" . $ssl_checkup_method_result['result'][0]["ip"] . "\e[1;37;40m" . PHP_EOL . PHP_EOL;
-
-
-            echo "    Do you Want to Continue Detection ? (y/n)" . PHP_EOL . PHP_EOL;
-            echo "    → ";
-            $handler = fopen("php://stdin", "r");
-            $continue = fgets($handler);
-            $continue = trim(strtolower($continue));
-
-            if ($continue != "y") {
-                $this->progressBar(100, 100);
-                return false;
-            } else {
-                $this->results['method_2'] = $ssl_checkup_method_result['result'][0]["ip"];
-            }
-        } else {
-            if ($ssl_checkup_connection_status) {
-                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
-            } else {
-                $this->results['method_2'] = "Connection Error";
-                echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mConnection Error\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
-            }
-        }
-
-        return true;
-    }
-
-    public function method3($hostname)
-    {
-
-        echo PHP_EOL . "    \e[1;31;40m[*] Method 3 : \e[1;36;40mCross-Site Port Attack \e[1;37;40m" . PHP_EOL . "    ";
+        echo PHP_EOL . "    \e[1;31;40m[*] Method 2 : \e[1;36;40mCross-Site Port Attack \e[1;37;40m" . PHP_EOL . "    ";
 
         sleep(1);
 
@@ -284,7 +226,7 @@ class DetectController extends Controller
         $discovery_target = trim($discovery_target);
 
         if ($discovery_target == null || $discovery_target == false) {
-            $this->results['method_3'] = "UnChecked";
+            $this->results['method_2'] = "UnChecked";
             echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mUnChecked\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             return "UnChecked";
         }
@@ -322,10 +264,10 @@ class DetectController extends Controller
                     $this->progressBar(100, 100);
                     return false;
                 } else {
-                    $this->results['method_3'] = $xspa_result['result'];
+                    $this->results['method_2'] = $xspa_result['result'];
                 }
             } else if (!$xsp_attack_connection_status) {
-                $this->results['method_3'] = "Connection Error";
+                $this->results['method_2'] = "Connection Error";
                 echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mConnection Error\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             } else {
                 echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
@@ -333,14 +275,14 @@ class DetectController extends Controller
 
         } else {
             if ($xspa_phase1['status'] == "wrong_discovery_target") {
-                $this->results['method_3'] = "UnChecked";
+                $this->results['method_2'] = "UnChecked";
                 echo PHP_EOL . "    \e[1;31;40m[!] Wrong Discovery Target \e[1;37;40m" . PHP_EOL . "    ";
                 sleep(1);
                 echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mUnChecked\e[1;37;40m" . PHP_EOL . "    ";
             } else if ($xsp_attack_connection_status) {
                 echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mPassed\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             } else {
-                $this->results['method_3'] = "Connection Error";
+                $this->results['method_2'] = "Connection Error";
                 echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mConnection Error\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             }
         }
@@ -348,9 +290,9 @@ class DetectController extends Controller
         return true;
     }
 
-    public function method4($hostname)
+    public function method3($hostname)
     {
-        echo PHP_EOL . "    \e[1;31;40m[*] Method 4 : \e[1;36;40mCheck Sub domains \e[1;37;40m" . PHP_EOL . "    ";
+        echo PHP_EOL . "    \e[1;31;40m[*] Method 3 : \e[1;36;40mCheck Sub domains \e[1;37;40m" . PHP_EOL . "    ";
 
         sleep(1);
 
@@ -359,7 +301,7 @@ class DetectController extends Controller
         $sub_domain_check_connection_status = $sub_domain->getConnectionStatus();
 
         if (!$sub_domain_check_connection_status) {
-            $this->results['method_4'] = "Connection Error";
+            $this->results['method_3'] = "Connection Error";
             echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mConnection Error\e[1;37;40m" . PHP_EOL . "\e[1;37;40m    ";
             return false;
         }
@@ -383,7 +325,7 @@ class DetectController extends Controller
             $sub_domain->sliceSubdomains($subdomains_number);
             $sub_domain_check_result = $sub_domain->subDomainCheckUp($hostname);
         } else {
-            $this->results['method_4'] = "UnChecked";
+            $this->results['method_3'] = "UnChecked";
             echo PHP_EOL . "    \e[1;31;40m[!] Wrong Input \e[1;37;40m" . PHP_EOL . "    ";
             sleep(1);
             echo PHP_EOL . "    \e[1;31;40m[*] Result : \e[1;36;40mUnChecked \e[1;37;40m" . PHP_EOL . "    ";
@@ -393,7 +335,7 @@ class DetectController extends Controller
 
         if ($sub_domain_check_result != NULL && $sub_domain_check_result != "false") {
 
-            $this->results['method_4'] = $sub_domain_check_result['server_ip'];
+            $this->results['method_3'] = $sub_domain_check_result['server_ip'];
             $this->database_controller->infiniteDatabase($hostname, $sub_domain_check_result['server_ip'], $sub_domain_check_result['subdomain']);
 
             echo PHP_EOL . "    \e[1;31;40m[*] Result :" . PHP_EOL . PHP_EOL .
