@@ -8,13 +8,12 @@
 ## CloudHound - Intro
 
 [CloudHound][1] is a Console Application Written in PHP Which allows Attacker to Bypass ~~CloudFlare~~ System and Detect Original Server .
-in order to do this, CloudHound use Several Private Methods Such as Cross-Site Port Attacking, Query in Guardiran DNS History wide-range Database , Check Any SSL Certificate and etc\
-\
-All Methods are Totaly Private and Belongs to Guardiran Security Team .
+in order to do this, CloudHound use Several Private Methods Such as Cross-Site Port Attacking, Query in Guardiran DNS History wide-range Database and etc
+
 
 ## Usage
 
-Run `application` File in Root Folder via PHP or open terminal and use `php application` Command ; application file is bootstraper of this script .
+Run `application` File in Root Folder via PHP or open terminal and use `php application` Command ; application file is bootstrapper of this script .
 
 Since App is Running You have 2 Operational Commands in front of your Self :
 
@@ -41,9 +40,8 @@ Since App is Running You have 2 Operational Commands in front of your Self :
 | Method | Description |
 | ------ | ----------- |
 | DNS History   | Using Guardiran Private Database (Up to +2M Records) to Detect Original IP |
-| SSL Certificate | Using Guardiran Private Database (Up to +2M Records) to Detect Original IP |
 | Cross-Site Port Attack    | Wide-Range XSPA |
-| Subdomain Check    | Check up 800 Common Subdomains |
+| Subdomain Scan    | +10K Common Subdomains (Scan Range is Pretty Flexible) |
 
 ## Credits
 
