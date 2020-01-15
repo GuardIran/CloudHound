@@ -1,4 +1,4 @@
-<div style="text-align: center;"><img src="https://development.guardiran.org/public/Images/cloudhound/cloudhound_logo.png" alt="CloudHound" /></div>
+<div style="text-align: center;"><img style="text-align: center;" src="https://development.guardiran.org/public/Images/cloudhound/cloudhound_logo.png" alt="CloudHound" /></div>
   
                                                                                            
 ## CloudHound - Intro
