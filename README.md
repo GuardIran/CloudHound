@@ -1,9 +1,5 @@
-
-                                   ________                ____  __                      __
-                                  / ____/ /___  __  ______/ / / / /___  __  ______  ____/ /
-                                 / /   / / __ \/ / / / __  / /_/ / __ \/ / / / __ \/ __  / 
-                                / /___/ / /_/ / /_/ / /_/ / __  / /_/ / /_/ / / / / /_/ /  
-                                \____/_/\____/\__,_/\__,_/_/ /_/\____/\__,_/_/ /_/\__,_/   
+<div style="text-align: center;"><img src="https://development.guardiran.org/public/Images/cloudhound/cloudhound_logo.png" alt="CloudHound" /></div>
+  
                                                                                            
 ## CloudHound - Intro
 
