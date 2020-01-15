@@ -26,7 +26,7 @@ class HelpController extends Controller
        
         CloudHound is a CloudFlare ByPass Tool which is Using Several Methods such 
         
-        as DNS History Check, SSL Certificate Check , Cross-Site Port Attack and Etc
+        as DNS History Checkup , Cross-Site Port Attack and Etc
          
         to Detect Original Server IP .
         
