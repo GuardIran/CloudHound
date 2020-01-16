@@ -48,10 +48,11 @@ Since App is Running You have 2 Operational Commands in front of your Self :
 
 ## About Us
 
-<div><img src="https://guardiran.org/uploads/logo.png" alt="Guardiran Sec. Team" /></div>
-
-We are Guardiran Security Team
-\
-https://www.guardiran.org 
+<p align="center">
+  <img src="https://guardiran.org/uploads/logo.png" alt="Guardiran Sec. Team" />
+  We are Guardiran Security Team
+  \
+  https://www.guardiran.org 
+</p>
 
 [1]: https://github.com/guardiran/cloudhound
