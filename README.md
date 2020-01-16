@@ -1,4 +1,4 @@
-<div style="text-align: center;"><img style="text-align: center;" src="https://development.guardiran.org/public/Images/cloudhound/cloudhound_logo.png" alt="CloudHound" /></div>
+<p style="text-align: center;"><img src="https://development.guardiran.org/public/Images/cloudhound/cloudhound_logo.png" alt="CloudHound" /></div>
   
                                                                                            
 ## CloudHound - Intro
@@ -42,7 +42,7 @@ Since App is Running You have 2 Operational Commands in front of your Self :
 ## Credits
 
 * **RedCoder** (Admin in Guardiran Sec. Team)
-* **RT3N** (Admin in Guardiran Sec. Team
+* **RT3N** (Admin in Guardiran Sec. Team)
 
 ## About Us
 
